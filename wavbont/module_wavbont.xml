@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_wavbont" default="compile.module.wavbont">
+  <dirname property="module.wavbont.basedir" file="${ant.file.module_wavbont}"/>
+  
+  <property name="module.jdk.home.wavbont" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.wavbont" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.wavbont" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.wavbont" value="-encoding UTF-8 -source 1.6 ${compiler.args}"/>
+  
+  <property name="wavbont.output.dir" value="${module.wavbont.basedir}/out/production/wavbont"/>
+  <property name="wavbont.testoutput.dir" value="${module.wavbont.basedir}/out/test/wavbont"/>
+  
+  <path id="wavbont.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="wavbont.module.production.classpath">
+    <path refid="${module.jdk.classpath.wavbont}"/>
+  </path>
+  
+  <path id="wavbont.runtime.production.module.classpath">
+    <pathelement location="${wavbont.output.dir}"/>
+  </path>
+  
+  <path id="wavbont.module.classpath">
+    <path refid="${module.jdk.classpath.wavbont}"/>
+    <pathelement location="${wavbont.output.dir}"/>
+  </path>
+  
+  <path id="wavbont.runtime.module.classpath">
+    <pathelement location="${wavbont.testoutput.dir}"/>
+    <pathelement location="${wavbont.output.dir}"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.wavbont">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.wavbont">
+    <patternset refid="excluded.from.module.wavbont"/>
+  </patternset>
+  
+  <path id="wavbont.module.sourcepath">
+    <dirset dir="${module.wavbont.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.wavbont" depends="compile.module.wavbont.production,compile.module.wavbont.tests" description="Compile module wavbont"/>
+  
+  <target name="compile.module.wavbont.production" depends="register.custom.compilers" description="Compile module wavbont; production classes">
+    <mkdir dir="${wavbont.output.dir}"/>
+    <javac2 destdir="${wavbont.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.wavbont}/javac">
+      <compilerarg line="${compiler.args.wavbont}"/>
+      <bootclasspath refid="wavbont.module.bootclasspath"/>
+      <classpath refid="wavbont.module.production.classpath"/>
+      <src refid="wavbont.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.wavbont"/>
+    </javac2>
+    
+    <copy todir="${wavbont.output.dir}">
+      <fileset dir="${module.wavbont.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.wavbont.tests" depends="register.custom.compilers,compile.module.wavbont.production" description="compile module wavbont; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.wavbont" description="cleanup module">
+    <delete dir="${wavbont.output.dir}"/>
+    <delete dir="${wavbont.testoutput.dir}"/>
+  </target>
+</project>
