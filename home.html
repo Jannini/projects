@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Home</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <h2>Sensor</h2>
+  <p>
+    ASD
+  </p>
+<button ion-button large round (click)="startSensor()">Sensor start</button>
+  <p></p>
+  <p></p>
+  <button ion-button large round (click)="EndSensor()">Sensor terminate</button>
+  <p></p>
+  <ion-item>
+    <ion-input type="text" placeholder="Ngrok ID" [(ngModel)]="ngrok"></ion-input>
+  </ion-item>
+  <button ion-button large (click)="make_and_uploadCSV()">Send Data</button>
+
+</ion-content>
